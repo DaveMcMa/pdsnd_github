@@ -1,3 +1,5 @@
+""" Python project for Udacity Nanodegree """
+
 import time
 import pandas as pd
 import numpy as np
@@ -20,7 +22,7 @@ def get_filters():
         (str) day - name of the day of week to filter by, or "all" to apply no day filter
     """
     print('Hello! Let\'s explore some US bikeshare data!')
-    
+
     # getting user input for city
     while True:
         city = input('Which cities data would you like to exlpore? (chicago / new york city / washington): ').lower()
@@ -42,7 +44,7 @@ def get_filters():
             continue
 
     #getting user input for day
-    while True: 
+    while True:
         day = input('Which day of the week would you like to see (select "all" or any day of the week): ').lower()
         if day in valid_day_range:
             print('input accepted \n')
@@ -50,7 +52,7 @@ def get_filters():
         else:
             print('we don\'t recognise that day, please try again and select either "all" or any day of the week')
             continue
-    
+
     return city,month,day
 
 
@@ -67,12 +69,12 @@ def load_data(city, month, day):
     """
 
     # transforming the data so we can apply our inputs correctly
-    df = pd.read_csv(CITY_DATA.get(city)) #reading the correct file based on the city 
+    df = pd.read_csv(CITY_DATA.get(city)) #reading the correct file based on the city
     df['Start Time'] = pd.to_datetime(df['Start Time']) # convert this column to 'datetime'
     df['month'] = df['Start Time'].dt.month # making new column with month (numerical)
     df['day_of_week'] = df['Start Time'].dt.weekday # making new column with day of week (numerical)
     df['hour'] = df['Start Time'].dt.hour # making new column with hour (does not require a filter later)
-    
+
     # now lets apply our filters
     # filtering by month
     if month != 'all':
@@ -91,14 +93,14 @@ def load_data(city, month, day):
         print("integer of day: ", day)
         # filter by day to create the new dataframe
         df = df[df['day_of_week'] == day]
-        
+
     return df
 
 def display_raw_data(df):
     """Prompts user if they would like to see raw data from the series they have selected"""
     index=0
     cont='yes'
-    
+
     while True:
         display = input('Would you like to see raw data first? (yes/no)').lower()
         if display=='yes':
@@ -116,20 +118,20 @@ def display_raw_data(df):
         else:
             print('we don\'t recognise that input, please select yes or no!')
             continue
-    
+
 
 def time_stats(df):
     """Displays statistics on the most frequent times of travel."""
     start_time = time.time()
-    
+
     print('\nCalculating The Most Frequent Times of Travel...\n')
 
     # display the most common month
     print('The most popular month from this dataset: ', valid_month_range[df['month'].mode()[0]])
-    
+
     # display the most common day of week
     print('The most popular day of the week from this dataset: ', valid_day_range[df['day_of_week'].mode()[0]])
-    
+
     # display the most common start hour
     print('The most popular starting hour from this dataset: ', df['hour'].mode()[0])
 
@@ -150,9 +152,9 @@ def station_stats(df):
     print('The most popular end station from this dataset: ', df['End Station'].mode()[0])
 
     # display most frequent combination of start station and end station trip
-    combination = df.groupby(['Start Station','End Station']).size().sort_values(ascending=False) 
-    print('The most frequent combination of start and end station: ', combination.index[0]) 
-    
+    combination = df.groupby(['Start Station','End Station']).size().sort_values(ascending=False)
+    print('The most frequent combination of start and end station: ', combination.index[0])
+
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
@@ -166,7 +168,7 @@ def trip_duration_stats(df):
     # display total travel time
     print('the total time travelled during this dataset was: ',df['Trip Duration'].sum())
 
-    
+
     # display mean travel time
     print('the mean time travelled during this dataset was: ',df['Trip Duration'].mean())
 
@@ -192,7 +194,7 @@ def user_stats(df):
         except KeyError:
             print("Gender information is not available from this city \n")
             break
-               
+
     # Display earliest, most recent, and most common year of birth (include exception for cities that don't have this data)
     while True:
         try:
@@ -203,7 +205,7 @@ def user_stats(df):
         except KeyError:
             print('Date of Birth information is not available for this city')
             break
-            
+
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
